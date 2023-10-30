@@ -40,43 +40,56 @@ const removeContact = async (req, res) => {
 
 const addContact = async (req, res) => {
   try {
-    const { name } = req.params;
-    const contact = { id: crypto.randomUUID(), name };
-    // const { name, email, phone } = req.params;
-    // const contact = { id: crypto.randomUUID(), name: name, email: email, phone: phone };
-    console.log(name);
+    const { body } = req;
+    const contact = { id: crypto.randomUUID(), ...body };
     const contacts = JSON.parse(await fs.readFile(FILE_PATH));
-
     contacts.push(contact);
     await fs.writeFile(FILE_PATH, JSON.stringify(contacts, null, 2));
     res.status(201).json(contact);
-    // res.json(contacts);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
+const updateContact = async (req, res) => {
+  try {
+    const { id, ...data } = req.params;
+    // const { body } = req;
+    // const contact = { ...body };
+
+    const contacts = JSON.parse(await fs.readFile(FILE_PATH));
+
+    const index = contacts.filter((c) => String(c.id) !== String(id));
+    if (index === -1) {
+      return null;
+    }
+    const contactIndexData = { ...contacts[index], ...data };
+    contacts[index] = { ...contactIndexData, id };
+
+    await fs.writeFile(FILE_PATH, JSON.stringify(contacts, null, 2));
+    res.status(201).json(contacts);
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
 };
 
-const updateContact = async (req, res) => {
-  try {
-    const contacts = JSON.parse(await fs.readFile(FILE_PATH));
-    const { id, data } = req.params;
-    const index = contacts.filter((c) => c.id !== id);
-    if (index === -1) {
-      return null;
-    }
-    contacts[index] = { id, ...data };
-    await fs.writeFile(FILE_PATH, JSON.stringify(contacts, null, 2));
-    // return contacts[index];
-    res.status(201).json(contacts);
-    // const contact = { id: crypto.randomUUID(), ...body };
-    // const contacts = JSON.parse(await fs.readFile(FILE_PATH));
-    // contacts.push(contact);
-    // await fs.writeFile(FILE_PATH, JSON.stringify(contacts));
-    // res.status(201).json(contact);
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
-};
+
+// const updateContact = async (req, res) => {
+//   try {
+
+//     const { id, data } = req.params;
+//     const contacts = JSON.parse(await fs.readFile(FILE_PATH));
+//     const index = contacts.filter((c) => String(c.id) !== String(id));
+//     if (index === -1) {
+//       return null;
+//     }
+//     contacts[index] = { id, ...data };
+//     await fs.writeFile(FILE_PATH, JSON.stringify(contacts, null, 2));
+//     res.status(201).json(contacts);
+//   } catch (e) {
+//     res.status(400).json({ error: e.message });
+//   }
+// }; 
+
 
 module.exports = {
   listContacts,
