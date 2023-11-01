@@ -2,6 +2,7 @@ const fs = require("node:fs/promises");
 const path = require("node:path");
 const crypto = require("node:crypto");
 // const { FILE } = require("node:dns");
+
 const FILE_PATH = path.join(__dirname, "/contacts.json");
 
 const listContacts = async (req, res) => {
@@ -50,45 +51,34 @@ const addContact = async (req, res) => {
     res.status(400).json({ error: e.message });
   }
 };
-const updateContact = async (req, res) => {
-  try {
-    const { id, ...data } = req.params;
-    // const { body } = req;
-    // const contact = { ...body };
 
-    const contacts = JSON.parse(await fs.readFile(FILE_PATH));
-
-    const index = contacts.filter((c) => String(c.id) !== String(id));
-    if (index === -1) {
-      return null;
-    }
-    const contactIndexData = { ...contacts[index], ...data };
-    contacts[index] = { ...contactIndexData, id };
-
-    await fs.writeFile(FILE_PATH, JSON.stringify(contacts, null, 2));
-    res.status(201).json(contacts);
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
-};
-
-
-// const updateContact = async (req, res) => {
+// const updateContact = async (contactId, body) => {}
+// const updateContact = async (req, res, next) => {
 //   try {
+//     // const { id, ...data } = req.params;
+//     const { contactId } = req.params;
+//     const { body } = req.body;
+//     // const contact = { ...body };
 
-//     const { id, data } = req.params;
-//     const contacts = JSON.parse(await fs.readFile(FILE_PATH));
-//     const index = contacts.filter((c) => String(c.id) !== String(id));
-//     if (index === -1) {
-//       return null;
+//     const updateNewContact = async (contactId, body) => {
+//       const upContact = await Contact
 //     }
-//     contacts[index] = { id, ...data };
-//     await fs.writeFile(FILE_PATH, JSON.stringify(contacts, null, 2));
-//     res.status(201).json(contacts);
+
+    // const contacts = JSON.parse(await fs.readFile(FILE_PATH));
+
+    // const index = contacts.findIndex(({ id: contactId }) => String(contactId) === String(id));
+    // if (index === -1) {
+    //   return null;
+    // }
+    // const contactIndexData = { ...contacts[index], ...body };
+    // contacts[index] = { id, ...contactIndexData };
+
+    // await fs.writeFile(FILE_PATH, JSON.stringify(contacts, null, 2));
+    // res.status(200).json(contacts);
 //   } catch (e) {
 //     res.status(400).json({ error: e.message });
 //   }
-// }; 
+// };
 
 
 module.exports = {
@@ -96,5 +86,5 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
-  updateContact,
+  // updateContact,
 };
