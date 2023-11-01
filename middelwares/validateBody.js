@@ -7,7 +7,7 @@ const validateBody = (schema) => {
       if (Object.keys(req.body).length === 0) {
         next(HttpError(400, `missing field`));
       } else {
-        next(HttpError(400, validateFile.error.message));
+        next(HttpError(400, `missing required`));
       }
     }
     next();

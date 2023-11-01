@@ -1,9 +1,7 @@
-const fs = require("node:fs/promises");
+const fs = require("fs/promises");
 const path = require("node:path");
-const crypto = require("node:crypto");
-// const { FILE } = require("node:dns");
-
 const FILE_PATH = path.join(__dirname, "/contacts.json");
+const crypto = require("node:crypto");
 
 const listContacts = async (req, res) => {
   try {
@@ -52,33 +50,18 @@ const addContact = async (req, res) => {
   }
 };
 
-// const updateContact = async (contactId, body) => {}
-// const updateContact = async (req, res, next) => {
-//   try {
-//     // const { id, ...data } = req.params;
-//     const { contactId } = req.params;
-//     const { body } = req.body;
-//     // const contact = { ...body };
+const updateContact = async (contactId, data) => {
+  // const contacts = await listContacts();
+  const contacts = JSON.parse(await fs.readFile(FILE_PATH));
+  const index = contacts.findIndex((contact) => contact.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = { id: contactId, ...data };
+  await fs.writeFile(FILE_PATH, JSON.stringify(contacts, null, 2));
+  return contacts[index];
+};
 
-//     const updateNewContact = async (contactId, body) => {
-//       const upContact = await Contact
-//     }
-
-    // const contacts = JSON.parse(await fs.readFile(FILE_PATH));
-
-    // const index = contacts.findIndex(({ id: contactId }) => String(contactId) === String(id));
-    // if (index === -1) {
-    //   return null;
-    // }
-    // const contactIndexData = { ...contacts[index], ...body };
-    // contacts[index] = { id, ...contactIndexData };
-
-    // await fs.writeFile(FILE_PATH, JSON.stringify(contacts, null, 2));
-    // res.status(200).json(contacts);
-//   } catch (e) {
-//     res.status(400).json({ error: e.message });
-//   }
-// };
 
 
 module.exports = {
@@ -86,5 +69,5 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
-  // updateContact,
+  updateContact,
 };
