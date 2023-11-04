@@ -1,5 +1,5 @@
 const fs = require("fs/promises");
-const path = require("node:path");
+const path = require("path");
 const FILE_PATH = path.join(__dirname, "/contacts.json");
 const crypto = require("node:crypto");
 
@@ -18,14 +18,6 @@ const getContactById = async (req, res) => {
   try {
     const { id } = req.params;
     const contacts = JSON.parse(await fs.readFile(FILE_PATH));
-
-    // const result = await contacts.getById(id);
-    // if (!result) {
-    //   return res.status(404).json({
-    //     message: "Not fo"
-    //   })
-    // }
-
     const contact = contacts.find((c) => String(c.id) === String(id));
     res.status(200).json(contact);
   } catch (e) {
