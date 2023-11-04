@@ -18,6 +18,14 @@ const getContactById = async (req, res) => {
   try {
     const { id } = req.params;
     const contacts = JSON.parse(await fs.readFile(FILE_PATH));
+
+    // const result = await contacts.getById(id);
+    // if (!result) {
+    //   return res.status(404).json({
+    //     message: "Not fo"
+    //   })
+    // }
+
     const contact = contacts.find((c) => String(c.id) === String(id));
     res.status(200).json(contact);
   } catch (e) {
@@ -50,14 +58,15 @@ const addContact = async (req, res) => {
   }
 };
 
-const updateContact = async (contactId, data) => {
+const updateContact = async (id, data) => {
   // const contacts = await listContacts();
   const contacts = JSON.parse(await fs.readFile(FILE_PATH));
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+  const index = contacts.findIndex(({ id: contactId }) => contactId === String(id));
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id: contactId, ...data };
+  const contact = { ...contacts[index], ...data };
+  contacts[index] = { ...contact, id };
   await fs.writeFile(FILE_PATH, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
