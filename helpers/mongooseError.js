@@ -3,4 +3,4 @@ const mongooseError = (error, data, next) => {
   next();
 };
 
-module.export = mongooseError;
+module.exports = mongooseError;

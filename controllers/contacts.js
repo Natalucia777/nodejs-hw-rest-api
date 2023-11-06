@@ -19,6 +19,7 @@ const addNawContact = async (req, res) => {
   const result = await contacts.sreate(req.body);
   res.status(201).json(result);
 };
+
 const removeContact = async (req, res) => {
   const { id } = req.params;
   const result = await contacts.removeById(id);
@@ -26,6 +27,7 @@ const removeContact = async (req, res) => {
     throw new HttpError(404, "Not found!");
   }
 };
+
 const updateById = async (req, res) => {
   const { id } = req.params;
   const result = await contacts.updateContact(id, req.body, {

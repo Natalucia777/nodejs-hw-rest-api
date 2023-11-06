@@ -1,5 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
+
 const FILE_PATH = path.join(__dirname, "/contacts.json");
 const crypto = require("node:crypto");
 
@@ -57,13 +58,12 @@ const updateContact = async (id, data) => {
   if (index === -1) {
     return null;
   }
+
   const contact = { ...contacts[index], ...data };
   contacts[index] = { ...contact, id };
   await fs.writeFile(FILE_PATH, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
-
-
 
 module.exports = {
   listContacts,
