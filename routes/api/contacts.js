@@ -1,6 +1,11 @@
-const ctrl = require("../../controllers/contacts");
-const { validateBody } = require("../../middelwares");
-const { updateContactSchema } = require("../../schemas/contactsSchema")
+const ctrl = require('../../controllers/contacts');
+const { validateBody } = require('../../middelwares');
+const {
+  addContactSchema,
+  updateContactSchema,
+  updateFavoriteSchema,
+} = require('../../schemas/contactsSchema');
+
 // const { HttpError, ctrlWrapper } = require("../../helpers");
 // const schemas = require("../../helpers/dataValidator");
 const express = require('express');
@@ -20,5 +25,5 @@ router.get('/:id', ctrl.getContactById);
 router.post('/', validateBody(updateContactSchema), ctrl.addNawContact);
 router.delete('/:id', ctrl.removeContact);
 router.put('/:id', validateBody(updateContactSchema), ctrl.updateById);
-  
+
 module.exports = router;
