@@ -1,6 +1,6 @@
-const { HttpError } = require("../helpers");
+const { HttpError } = require('../helpers');
 
-const validateFavorite = (schema) => {
+const validateFavorite = schema => {
   const func = (req, res, next) => {
     const validateFile = schema.validate(req.body);
     if (validateFile.error) {
