@@ -1,6 +1,7 @@
 const express = require('express');
 const ctrl = require('../../controllers/contacts');
 const router = express.Router();
+
 const {
   isValidId,
   validateBody,
@@ -15,9 +16,10 @@ router.delete('/:id', isValidId, ctrl.removeContact);
 router.put(
   '/:id',
   isValidId,
-  validateBody(schemas.updateContactSchema),
+  validateBody(schemas.addContactSchema),
   ctrl.updateById
 );
+
 router.patch(
   '/:id/favorite',
   isValidId,
