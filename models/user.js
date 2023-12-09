@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 const { mongooseError } = require("../helpers");
 const Joi = require("joi");
+
 const userSchema = new Schema(
   {
     password: {
@@ -38,9 +39,16 @@ const loginSchema = Joi.object({
     .required(),
   password: Joi.string().min().required(),
 });
+
+const validSubscriptionValues = ["starter", "pro", "business"];
+const updateUserSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid(...validSubscriptionValues).required(),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
+  updateUserSubscriptionSchema,
 };
 
 const User = model("user", userSchema);

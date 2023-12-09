@@ -9,7 +9,6 @@ const {
 } = require("../../middelwares");
 const { schemas } = require("../../models/contact");
 
-
 // router.get('/', ctrl.listContacts);
 router.get('/', authenticate, ctrl.listContacts);
 // router.get('/:id', isValidId, ctrl.getContactById);
