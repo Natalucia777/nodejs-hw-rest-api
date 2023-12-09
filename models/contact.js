@@ -45,6 +45,7 @@ const schemas = {
 };
 
 contactSchema.post("save", mongooseError);
+
 const Contact = model("contact", contactSchema);
 
 module.exports = {
