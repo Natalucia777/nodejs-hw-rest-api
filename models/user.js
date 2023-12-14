@@ -6,7 +6,7 @@ const userSchema = new Schema(
   {
     password: {
       type: String,
-      required: [true, "Set password"],
+      required: [true, "Set password for user"],
     },
     email: {
       type: String,
@@ -23,37 +23,49 @@ const userSchema = new Schema(
       default: "",
     },
   },
-  { versionKey: false, timestamps: true });
+  { versionKey: false }
+);
 
 userSchema.post("save", mongooseError);
 
 const registerSchema = Joi.object({
-  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
-  password: Joi.string().min().required(),
-  subscription: Joi.string(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required()
+    .messages({
+      "any.required": "Email field is required",
+      "string.base": "Email field must be a string",
+    }),
+  password: Joi.string().required().messages({
+    "any.required": "Password field is required",
+    "string.base": "Password field must be a string",
+  }),
+  subscription: Joi.string().messages({
+    "string.base": "Subscription field must be a string",
+  }),
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
-  password: Joi.string().min().required(),
-});
-
-const validSubscriptionValues = ["starter", "pro", "business"];
-const updateUserSubscriptionSchema = Joi.object({
-  subscription: Joi.string().valid(...validSubscriptionValues).required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required()
+    .messages({
+      "any.required": "Email field is required",
+      "string.base": "Email field must be a string",
+    }),
+  password: Joi.string().required().messages({
+    "any.required": "Password field is required",
+    "string.base": "Password field must be a string",
+  }),
 });
 
 const schemas = {
   registerSchema,
   loginSchema,
-  updateUserSubscriptionSchema,
 };
 
 const User = model("user", userSchema);
-
-module.export = {
+module.exports = {
   User,
   schemas,
 };
