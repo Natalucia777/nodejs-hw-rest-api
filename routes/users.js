@@ -3,7 +3,7 @@ const { validateBody, authenticate, upload } = require("../middelwares");
 const { schemas } = require("../models/user");
 const ctrl = require("../controllers/users");
 const router = express.Router();
-const { schemas } = require("../models/user");
+
 
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register );
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);

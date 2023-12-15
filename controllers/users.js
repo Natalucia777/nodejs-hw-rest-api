@@ -18,7 +18,6 @@ const register = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  // const newUser = await User.create({ ...req.body, password: hashPassword });
   const avatarURL = gravatar.url(email);
   const newUser = await User.create({
     ...req.body,
@@ -86,15 +85,21 @@ const updateSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  const {id } = req.user;
+  const { _id } = req.user;
   const { path: tmpUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarDir, filename);
 
   await fs.rename(tmpUpload, resultUpload);
   const avatar = await Jimp.read(resultUpload);
+  avatar.resize(250, 250);
+  avatar.write(resultUpload);
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  res.json({
+    avatarURL,
+  });
 };
-
 
 module.exports = {
   register: ctrlWrapper(register),
