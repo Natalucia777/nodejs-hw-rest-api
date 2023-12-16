@@ -28,6 +28,10 @@ const userSchema = new Schema(
     },
     verify: {
       type: Boolean,
+      default: false,
+    },
+    verrificationToken: {
+      type: String,
       default: "",
       required: [true, "Verify token is required"],
     },
@@ -67,6 +71,7 @@ const loginSchema = Joi.object({
     "string.base": "Password field must be a string",
   }),
 });
+
 
 const schemas = {
   registerSchema,
