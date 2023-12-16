@@ -29,7 +29,12 @@ const register = async (req, res) => {
     verificationToken,
   });
 
-
+  const verifyEmail = {
+    to: email,
+    subject: " Verify email",
+    html: `<a terget="_blank" href="${BASE_URL}/user/veryfi/${verificationToken}">Click verify email</a>`,
+  };
+  await sendEmail(verifyEmail);
   
   res.status(201).json({
     user: {
@@ -115,4 +120,5 @@ module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   updateSubscription: ctrlWrapper(updateSubscription),
   updateAvatar: ctrlWrapper(updateAvatar),
+  verifyEmail: ctrlWrapper(verifyEmail),
 };
