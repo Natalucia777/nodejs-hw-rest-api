@@ -38,7 +38,6 @@ const userSchema = new Schema(
   },
   { versionKey: false }
 );
-
 userSchema.post("save", mongooseError);
 
 const registerSchema = Joi.object({
@@ -72,10 +71,20 @@ const loginSchema = Joi.object({
   }),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required()
+    .messages({
+      "any.required": "Email field is required",
+      "string.base": "Email field must be a string",
+    }),
+});
 
 const schemas = {
   registerSchema,
   loginSchema,
+  emailSchema,
 };
 
 const User = model("user", userSchema);

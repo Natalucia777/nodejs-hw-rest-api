@@ -22,7 +22,7 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
-  
+
   const verificationToken = nanoid();
   const newUser = await User.create({
     ...req.body,
@@ -33,11 +33,11 @@ const register = async (req, res) => {
 
   const verifyEmail = {
     to: email,
-    subject: ' Verify email',
+    subject: 'Verify email',
     html: `<a terget="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Click verify email</a>`,
   };
   await sendEmail(verifyEmail);
-  
+
   res.status(201).json({
     user: {
       email: newUser.email,
@@ -63,18 +63,18 @@ const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw HttpError(404, "Email not found");
+    throw HttpError(404, 'Email not found');
   }
   if (user.verify) {
-    throw HttpError(400, "Verification has already been passed");
+    throw HttpError(400, 'Verification has already been passed');
   }
   const verifyEmail = {
     to: email,
-    subject: "Verify email",
+    subject: 'Verify email',
     html: `<a terget="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`,
   };
   await sendEmail(verifyEmail);
-  res.json({ message: "Verification email sent" });
+  res.json({ message: 'Verification email sent' });
 };
 
 const login = async (req, res) => {
@@ -143,7 +143,6 @@ const updateAvatar = async (req, res) => {
   const avatar = await Jimp.read(resultUpload);
   avatar.resize(250, 250);
   avatar.write(resultUpload);
-  
   const avatarURL = path.join('avatars', filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
   res.json({
